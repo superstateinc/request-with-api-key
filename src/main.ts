@@ -4,7 +4,7 @@ import { TransactionStatus } from "./types";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const BASE_URL = "https://api.superstate.co";
+export const BASE_URL = "https://api.superstate.com";
 export const TRANSACTIONS_ENDPOINT = `/v2/transactions`;
 export const REQUEST_URL = `${BASE_URL}${TRANSACTIONS_ENDPOINT}`;
 
