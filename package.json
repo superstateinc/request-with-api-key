@@ -1,0 +1,23 @@
+{
+  "name": "request-with-api-key",
+  "version": "0.1.0",
+  "description": "Make a request to with an API key",
+  "author": "Superstate Inc",
+  "main": "main.js",
+  "scripts": {
+    "start": "tsx src/main.ts",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "uuid": "^11.1.0"
+  }
+}
