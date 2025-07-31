@@ -1,22 +1,32 @@
 import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
-import { BASE_URL, SUPERSTATE_API_KEY, SUPERSTATE_API_SECRET } from "./main";
 import { QueryParams, SuperstateApiKeyRequest } from "./types";
 
+const DEFAULT_BASE_URL = "https://api.superstate.com";
+
 export async function superstateApiKeyRequest({
+  baseUrl = DEFAULT_BASE_URL,
+  apiKey,
+  apiSecret,
   endpoint,
   method,
-  queryParams,
-  body,
+  queryParams = {},
+  body = {},
 }: SuperstateApiKeyRequest) {
-  const headers = buildHeaders(endpoint, queryParams, body);
+  if (!endpoint) {
+    throw new Error("endpoint is required");
+  }
+  if (endpoint.startsWith("/")) {
+    endpoint = endpoint.substring(1);
+  }
+
+  const headers = buildHeaders(endpoint, apiKey, apiSecret, queryParams, body);
 
   // Construct URL with query parameters
-  const url = new URL(`${BASE_URL}${endpoint}`);
+  const url = new URL(`${baseUrl}/${endpoint}`);
   Object.entries(queryParams).forEach(([key, value]) => {
     url.searchParams.append(key, String(value));
   });
-  console.log("Full request URL:", url.toString());
 
   const response = await fetch(url.toString(), {
     method,
@@ -26,28 +36,29 @@ export async function superstateApiKeyRequest({
     }),
   });
 
-  const data = await response.text();
-  console.log(`[${response.status}] ${data}`);
+  const data = await response.json();
   return data;
 }
 
 function buildHeaders(
   endpoint: string,
+  apiKey: string,
+  apiSecret: string,
   queryParams: Record<string, any>,
-  body: Record<string, any>
+  body: Record<string, any>,
 ) {
   const nonce = uuidv4();
   const timestamp = Date.now().toString();
   const paramsHash = getParamsHash(endpoint, queryParams);
   const bodyHash = getBodyHash(body);
-  const message = `${SUPERSTATE_API_KEY}${nonce}${timestamp}${paramsHash}${bodyHash}`;
+  const message = `${apiKey}${nonce}${timestamp}${paramsHash}${bodyHash}`;
   const hmac = crypto
-    .createHmac("sha256", SUPERSTATE_API_SECRET)
+    .createHmac("sha256", apiSecret)
     .update(message)
     .digest("base64");
 
   const superstateHeaders = {
-    Authorization: `Bearer ${SUPERSTATE_API_KEY}`,
+    Authorization: `Bearer ${apiKey}`,
     "X-Nonce": nonce,
     "X-Timestamp": timestamp,
     "X-Params-Hash": paramsHash,
@@ -61,7 +72,7 @@ function buildHeaders(
 
   const headers = new Headers();
   Object.entries({ ...superstateHeaders, ...appHeaders }).forEach(
-    ([key, value]) => headers.append(key, String(value))
+    ([key, value]) => headers.append(key, String(value)),
   );
 
   return headers;

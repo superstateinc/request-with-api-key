@@ -1,17 +1,24 @@
 {
-  "name": "request-with-api-key",
-  "version": "0.1.0",
-  "description": "Make a request to with an API key",
-  "author": "Superstate Inc",
-  "main": "main.js",
+  "name": "@superstateinc/api-key-request",
+  "version": "0.1.3",
+  "description": "Make an API request to a Superstate endpoint that requires an API key",
+  "author": "Superstate",
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
-    "start": "tsx src/main.ts",
-    "build": "tsc"
+    "start": "tsx src/example.ts",
+    "build": "rm -rf ./dist/* && tsc && tsc-alias && node scripts/postTsc.cjs"
   },
-  "keywords": [],
+  "keywords": [
+    "superstate",
+    "api",
+    "request"
+  ],
   "license": "ISC",
+  "packageManager": "pnpm@10.8.0",
   "devDependencies": {
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.16",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3"
   },
@@ -19,5 +26,8 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
     "uuid": "^11.1.0"
+  },
+  "publishConfig": {
+    "directory": "dist"
   }
 }

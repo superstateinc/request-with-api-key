@@ -36,3 +36,6 @@ Thumbs.db
 
 # Build directory
 dist
+
+# Local test directory
+local

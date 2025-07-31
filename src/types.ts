@@ -5,10 +5,13 @@ export interface QueryParams {
 export type RequestMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 export interface SuperstateApiKeyRequest {
+  baseUrl?: string;
+  apiKey: string;
+  apiSecret: string;
   endpoint: string;
   method: RequestMethod;
-  queryParams: QueryParams;
-  body: Record<string, any>;
+  queryParams?: QueryParams;
+  body?: Record<string, any>;
 }
 
 export interface GetTransactionsV2Query extends QueryParams {
