@@ -22,6 +22,6 @@ export interface GetTransactionsV2Query extends QueryParams {
 }
 
 export enum TransactionStatus {
-  Pending = "pending",
-  Completed = "completed",
+  Pending = "Pending",
+  Completed = "Completed",
 }

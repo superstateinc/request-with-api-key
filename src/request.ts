@@ -36,6 +36,12 @@ export async function superstateApiKeyRequest({
     }),
   });
 
+  if (!response.ok) {
+    throw new Error(
+      `Request failed with status ${response.status}: ${await response.text()}`
+    );
+  }
+
   const data = await response.json();
   return data;
 }
@@ -45,7 +51,7 @@ function buildHeaders(
   apiKey: string,
   apiSecret: string,
   queryParams: Record<string, any>,
-  body: Record<string, any>,
+  body: Record<string, any>
 ) {
   const nonce = uuidv4();
   const timestamp = Date.now().toString();
@@ -72,7 +78,7 @@ function buildHeaders(
 
   const headers = new Headers();
   Object.entries({ ...superstateHeaders, ...appHeaders }).forEach(
-    ([key, value]) => headers.append(key, String(value)),
+    ([key, value]) => headers.append(key, String(value))
   );
 
   return headers;
@@ -107,12 +113,18 @@ function getBodyHash(body: Record<string, any>) {
   return bodyHash;
 }
 
-// Keys of the query params and body must be sorted alphabetically
+// Keys of the query params and body must be sorted alphabetically (recursively)
 function sortKeys(obj: Record<string, any>) {
   return Object.keys(obj)
     .sort()
     .reduce((acc: Record<string, any>, key) => {
-      acc[key] = obj[key];
+      const value = obj[key];
+      // Recursively sort nested objects
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        acc[key] = sortKeys(value);
+      } else {
+        acc[key] = value;
+      }
       return acc;
     }, {});
 }
