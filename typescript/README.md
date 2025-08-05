@@ -1,10 +1,36 @@
-# Superstate API Key Request
+# @superstateinc/api-key-request
 
-Superstate's API key protected endpoints utilize a specific series of headers in order to prevent against various attacks. We provide sample code and published packages for various languages, separated by folder within this repository.
+This package provides a simple way to make requests to Superstate API endpoints that are protected by an API key.
+
+## Quickstart
+
+Install the package using npm (or your favorite package manager):
+
+```bash
+npm install @superstateinc/api-key-request
+```
+
+Use the package in your code:
+
+```typescript
+import { superstateApiKeyRequest, TransactionStatus } from '@superstateinc/api-key-request';
+
+const transactions = await superstateApiKeyRequest({
+  apiKey: SUPERSTATE_API_KEY,
+  apiSecret: SUPERSTATE_API_SECRET,
+  endpoint: "v2/transactions",
+  method: "GET",
+  queryParams: {
+    transaction_status: TransactionStatus.Pending
+  },
+});
+
+console.log(transactions);
+```
 
 ## Manually creating a request
 
-The packages in this folder contain code that will automatically builds the required headers for you. However, if you'd like to manually manually building the headers, you can follow the instructions below.
+The package automatically builds the required headers for you, but manually building the headers is also possible, if you would prefer to do it yourself.
 
 ### Building the header
 
